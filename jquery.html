@@ -27,22 +27,27 @@
     ********************************************************/
      
     //利用$.ajax()方法傳送請求並取得回應
-    $.ajax(
-      {
-        url:'https://kktix.com/events.json',
-        type:'GET',
-        success:function(response){
-          console.log(response);
-          renderList(response)
-        },
-        error:function(){
-          console.log("err:"+err);
-        },
-        complete:function(xhr,status){
-          console.log(status);
-        }
-      }
-    )   
+    // $.ajax(
+    //   {
+    //     url:'https://kktix.com/events.json',
+    //     type:'GET',
+    //     success:function(response){
+    //       console.log(response);
+    //       renderList(response)
+    //     },
+    //     error:function(){
+    //       console.log("err:"+err);
+    //     },
+    //     complete:function(xhr,status){
+    //       console.log(status);
+    //     }
+    //   }
+    // )   
+      // {table,news,id:12}
+      // 等於以下寫法
+      $.get('https://kktix.com/events.json',function(response){
+        renderList(response);
+      })
 
     function renderList(response){
         document.querySelector('.title').innerHTML=response.title;   //innerHTML取文字，取title的文字。querySelector是較新的功能，等同於較舊的document.getElementBy...
