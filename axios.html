@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="#" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
     <!-----引入axios函式庫------->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
 </head>
 <body>
     <h1 class="header">axios</h1>
@@ -26,8 +27,25 @@
 ********************************************************/
 
 //發起一個axios請求
+axios.get('https://kktix.com/events.json')
+.then(function(response){
+    renderList(response.data)
+})
+.catch(function(err){
+    console.log(err)
+})
 
+function renderList(response){
+        document.querySelector('.title').innerHTML=response.title;   //innerHTML取文字，取title的文字。querySelector是較新的功能，等同於較舊的document.getElementBy...
+        document.querySelector('h4').innerHTML=response.updated;
+        let events=response.entry;
 
+        let str="";
+        events.forEach(function(event,index) {
+            str=str+`<li>${event.title}</li>`;
+        })
+        document.querySelector('ul').innerHTML=str;
+    }
 //建立回呼函式(call back function)來處理回應時的各項行為
 
 

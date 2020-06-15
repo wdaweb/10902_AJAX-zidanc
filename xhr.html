@@ -26,14 +26,43 @@
     ********************************************************/
 
     //宣告一個XMLHttpRequest物件
-
+    // let:區域宣告 var:全域宣告
+    let xhr=new XMLHttpRequest   //區域宣告一個變數xhr成為一個新的XMLHttpRequest物件
+    
 
     //建立請求的各項設定及實質內容
-
+    // xhr.open(            //對變數xhr開open一個這樣的請求
+    //     Method,
+    //     URL,
+    //     async
+    //     );       //上方為下方39~43行在做什麼的架構。
+    xhr.open(
+        'GET',
+        'https://kktix.com/events.json',
+        true
+        );
 
     //建立得到回應時的各項設定及行為
+    xhr.onload=function(){      //當xhr變數有執行載入的時候.....
+        let type=xhr.getResponseHeader("Content-Type");
+        let response=xhr.responseText;      //回應是純文字格式
+        let res=JSON.parse(response);       //用Json去解析這個回應
+        console.log(res);       //F12可以看到此物件含有什麼。res是response之意。
+        document.querySelector(".title").innerHTML=res.title;   //innerHTML取文字，取title的文字。querySelector是較新的功能，等同於較舊的document.getElementBy...
+        document.querySelector("h4").innerHTML=res.updated;
+        let events=res.entry;
 
+        let str="";
+        // str="<li> 哈哈</li>";
+        events.forEach(function(event,index) {
+            str=str+`<li>${event.title}</li>`;
+        })
+        
+        // document.getElementsByTagName('ul')[0].innerHTML=str; 較舊寫法，而且較長
+        document.querySelector('ul').innerHTML=str;
+    }
 
     //送出請求
-
+    xhr.send();         //Ajax就是讓你不用真的連到其他人網頁那邊(kktix)，你就可以在原始網站得到資料。
+    document.querySelector(".footer").innerHTML="這是頁腳";
     </script>
