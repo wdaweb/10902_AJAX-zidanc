@@ -1,7 +1,9 @@
+  
 <?php
 include_once "base.php";
 
 $db=new DB("students");
+
 $id=$_GET['id'];
 
 $row=$db->find($id);
@@ -10,7 +12,7 @@ $row=$db->find($id);
 
 <div id='editBlock'>
     <h3>編輯學生資料</h3>
-    <form id="eidt">
+    <form id="edit">
       <ul>
         <li>姓名：<input type="text" name="name" id="name" value="<?=$row['name'];?>"></li>
         <li>學號：<input type="text" name="uni_id" id="uni_id" value="<?=$row['uni_id'];?>"></li>
@@ -22,9 +24,15 @@ $row=$db->find($id);
         <li>電話：<input type="text" name="tel" id="tel" value="<?=$row['tel'];?>"></li>
         <li>科別：<input type="text" name="dept" id="dept" value="<?=$row['dept'];?>"></li>
         <li>畢業國中：<input type="text" name="grad_at" id="grad_at" value="<?=$row['grad_at'];?>"></li>
+        <li><input type="hidden" name="id" id="id" value="<?=$row['id'];?>"></li>
+
       </ul>
-      <div><input type="button" value="確定修改" onclick="editStudent()"></div>
+      <div>
+        <input type="button" value="確定修改" onclick="update()">
+        <input type="button" value="取消操作" onclick="cancel()">
+      </div>
+
     </form>
 
-
+  
   </div>

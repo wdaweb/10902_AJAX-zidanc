@@ -23,9 +23,12 @@
 
   </select> <input type="text" name='q' id="query"><input type="button" value="查詢" onclick="query()">
 
+  
   <!--用來存放編輯表單的區塊-->
   <div class="edit-form"></div>
-
+  
+  <!--用來新增編輯表單的區塊-->
+  <div class="add-form"></div>
 
   <!--用來存放查詢結果的區塊-->
   <div class="query-result"></div>
@@ -38,7 +41,7 @@
 
 
   <!---新增資料用的表單-->
-  <div id='insertBlock' style="display:none">
+  <!-- <div class="add-form" id='insertBlock' style="display:none">
     <h3>新增學生資料</h3>
     <form action="api/insert.php" method='post' id="create">
       <ul>
@@ -57,7 +60,7 @@
     </form>
 
 
-  </div>
+  </div> -->
   
   <!---編輯資料用的表單-->
 
@@ -106,10 +109,29 @@ function create(){
 
 //顯示新增資料的表單
 function openInsert(){
-  document.querySelector("#insertBlock").style.display='block';
+  // document.querySelector("#insertBlock").style.display='block';
+  $.get("api/add_form.php"),function(form){
+    document.querySelector(".add-form").innerHTML=form
+    document.querySelector(".edit-form").innerHTML="";
+  }
 }
 
 //查詢資料的函式
+$("#query").on("input",()=>{ai()})
+
+function ai(){
+  $.get("api/query.php",{str},function(res){
+    console.log(res)
+    let data=JSON.parse(data);
+
+    let dom="";
+    data.forEach(function(value,index){
+      dom=dom+"<span style='font-size:20px'>"+value.name+"-"+value.class_num+"</span><br>";
+    })
+    document.querySelector(".query-result").innerHTML=dom;
+  })
+}
+
 
 //用ajax向後端api程式要求班級清單選項並放在select標籤中
 function getClasses(){
@@ -140,6 +162,35 @@ function query(){
 function getUpdateForm(id){
   $.post("api/edit.php",{id},function(form){
     document.querySelector(".edit-form").innerHTML=form;
+    document.querySelector(".add-form").innerHTML="";
+  })
+}
+
+function update(){
+  let form_data={};
+  form_data['name']=document.querySelector("#name").value
+  form_data['uni_id']=document.querySelector("#uni_id").value
+  form_data['class_num']=document.querySelector("#class_num").value
+  form_data['birthday']=document.querySelector("#birthday").value
+  form_data['nat_id']=document.querySelector("#nat_id").value
+  form_data['addr']=document.querySelector("#addr").value
+  form_data['parent']=document.querySelector("#parent").value
+  form_data['tel']=document.querySelector("#tel").value
+  form_data['dept']=document.querySelector("#dept").value
+  form_data['grad_at']=document.querySelector("#grad_at").value
+  form_data['id']=document.querySelector("#id").value
+
+  $.post("api/update.php",form_data,function(res){
+    if(res=='1'){
+      alert("更新成功");
+      let nowClass=document.querySelector("#classes").value
+      getStudents(nowClass)
+      document.querySelector(".edit-form").innerHTML="";
+
+    }else{
+      alert("更新失敗");
+    }
+
   })
 }
 
@@ -154,6 +205,12 @@ function del(id){
       alert("刪除失敗，請洽管理員")
     }
   })
+}
+
+//取消功能
+function cancel(){
+    document.querySelector(".edit-form").innerHTML="";
+    document.querySelector(".add-form").innerHTML="";
 }
 
 </script>
